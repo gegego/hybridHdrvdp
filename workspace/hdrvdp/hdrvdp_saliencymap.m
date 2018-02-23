@@ -158,7 +158,7 @@ function res = hdrvdp_saliencymap( test, reference, color_encoding, pixels_per_d
 
 A = zeros(size(reference,1), size(reference,2), 'double');
 % load settings
-in = load('/Users/wejaq/Documents/MATLAB/new/workspace/parameters.mat');
+in = load('parameters.mat');
 params = in.params;
 
 % make Saliencymap

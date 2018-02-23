@@ -134,9 +134,7 @@ background = rgb2gray(ud.imgl);
 tic;
 if strcmp(btupm, 'HDRVDP') == 1
     if strcmp(topdown, 'SSIM') == 1
-        res1 = hdrvdp_saliencymap( ud.imgl, ud.imgr, 'sRGB-display', ppd, [], s, min, max, threshold_sliency);
-        
-%         res1 = hdrvdp_ssim( ud.imgl, ud.imgr, 'sRGB-display', ppd, [], s, min, max, 'normal' );
+        res1 = hdrvdp_ssim( ud.imgl, ud.imgr, 'sRGB-display', ppd, [], s, min, max, 'normal' );
 
         if res1.same == 0
             map = hdrvdp_visualize_ssim(background, res1.P_map, res1.patchPoints);
@@ -153,7 +151,16 @@ if strcmp(btupm, 'HDRVDP') == 1
             map = cat(3, background, background, background);  
         end
         mx=res1.maxval;
-        mi=res1.minval;        
+        mi=res1.minval;
+    elseif strcmp(topdown, 'SaliencyMap') == 1
+        res1 = hdrvdp_saliencymap( ud.imgl, ud.imgr, 'sRGB-display', ppd, [], s, min, max, threshold_sliency);
+        if res1.same == 0
+            map = hdrvdp_visualize_ssim(background, res1.P_map, res1.patchPoints);
+        else
+            map = cat(3, background, background, background);  
+        end
+        mx=res1.maxval;
+        mi=res1.minval;
     else
         T = double(ud.imgl)/2^8;
         R = double(ud.imgr)/2^8;
@@ -176,6 +183,15 @@ elseif strcmp(btupm, 'VDM') == 1
             map = vdm_visualize_ssim(background, res1.dmap, res1.patchPoints);
         else
             map =cat(3, background, background, background);  
+        end
+        mx=res1.maxval;
+        mi=res1.minval;
+    elseif strcmp(topdown, 'SaliencyMap') == 1
+        res1 = VDM_IDX_Saliency( ud.imgl, ud.imgr, ppd, min, max, 'normal', s, threshold_sliency);
+        if res1.same == 0
+            map = vdm_visualize_ssim(background, res1.dmap, res1.patchPoints);
+        else
+            map = cat(3, background, background, background);  
         end
         mx=res1.maxval;
         mi=res1.minval;
@@ -453,7 +469,7 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global ud;
-in = load('/Users/wejaq/Documents/MATLAB/new/workspace/parameters.mat');
+in = load('parameters.mat');
 params = in.params;
 
 % make Saliencymap
